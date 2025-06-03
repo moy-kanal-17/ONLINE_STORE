@@ -28,7 +28,7 @@ export class CreatorhGuard implements CanActivate {
           secret: process.env.JWT_ACCESS_SECRET || "super-secret",
         });
           
-      request.user= payload;
+      request["user"]= payload;
     //   if(!payload.iscreator) {
     //     console.log('User is not an creator');
     //     response.redirect('/auth/login');

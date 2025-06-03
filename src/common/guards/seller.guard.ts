@@ -29,7 +29,7 @@ export class SellerhGuard implements CanActivate {
         });
           
       request['user'] = payload;
-      request.user= payload;
+     
 
       if(payload.role !== 'seller') {
         console.log('User is not an seller');
