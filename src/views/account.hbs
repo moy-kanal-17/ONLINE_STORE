@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil sahifasi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+        background: #f8f9fa; /* Ochiq kulrang fon */
+        font-family: 'Segoe UI', sans-serif;
+        color: #343a40; /* To'q kulrang asosiy rang */
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .glass-card {
+        background-color: #fff; /* Oq fon */
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+    .profile-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h3 {
+        color: #343a40;
+    }
+    .text-muted {
+        color: #6c757d !important;
+    }
+    strong {
+        font-weight: 500;
+        color: #495057;
+    }
+    i {
+        margin-right: 5px;
+        color: #007bff; /* Asosiy rang */
+    }
+    .badge {
+        font-size: 0.8rem;
+    }
+    code {
+        background-color: #e9ecef;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 85%;
+        color: #212529;
+    }
+    .btn-outline-primary, .btn-outline-secondary {
+        transition: all 0.3s ease;
+    }
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+    }
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+    }
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(108, 117, 125, 0.2);
+    }
+    hr {
+        border-top: 1px solid #e0e0e0;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+</style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="glass-card p-5">
+            <div class="d-flex align-items-center mb-4">
+                <img src="https://sun9-11.userapi.com/s/v1/if1/t1P41Bvo6YqoHEM4PXM4tuaONuQ4wR6pimlTsPzH4InKe2D5Rg247_eHm5r6mqsKeLEFww.jpg?quality=96&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,500x500&from=bu&cs=500x500" class="rounded-circle me-3 profile-img" alt="User Avatar" />
+                <div>
+                    <h3 class="text-dark mb-0">Salom, {{#if user.full_name}}{{user.full_name}}{{else}}{{user.first_name}}{{/if}} 👋</h3>
+                    <small class="text-muted">ID: #{{user.id}}</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="fas fa-user"></i> <strong>Ism:</strong> {{user.first_name}}</p>
+                    <p><i class="fas fa-user-tag"></i> <strong>Familiya:</strong> {{user.last_name}}</p>
+                    {{#if user.full_name}}
+                    <p><i class="fas fa-signature"></i> <strong>To'liq ism:</strong> {{user.full_name}}</p>
+                    {{/if}}
+                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{user.email}}</p>
+                    <p><i class="fas fa-phone"></i> <strong>Telefon:</strong> {{user.phone_number}}</p>
+                    <p><i class="fas fa-venus-mars"></i> <strong>Jinsi:</strong> {{user.gender}}</p>
+                    <p><i class="fas fa-birthday-cake"></i> <strong>Tug‘ilgan sana:</strong> {{user.birthday}}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><i class="fas fa-lock"></i> <strong>Parol (hash):</strong> <code>{{user.password}}</code></p>
+                    <p><i class="fas fa-check-circle"></i> <strong>Faol holat:</strong>
+                        {{#if user.is_active}}<span class="badge bg-success">Faol</span>{{else}}<span class="badge bg-danger">Faol emas</span>{{/if}}
+                    </p>
+                    <p><i class="fas fa-link"></i> <strong>Aktivatsiya havolasi:</strong> <code>{{user.active_link}}</code></p>
+                    <p><i class="fas fa-key"></i> <strong>Token (hash):</strong> <code>{{user.hashed_token}}</code></p>
+                    <p><i class="fas fa-calendar-plus"></i> <strong>Ro‘yxatdan o‘tgan:</strong> {{user.createdAt}}</p>
+                    <p><i class="fas fa-clock-rotate-left"></i> <strong>Yangilangan:</strong> {{user.updatedAt}}</p>
+                </div>
+            </div>
+
+            <hr class="text-muted" />
+            <div class="d-flex justify-content-between">
+                <a href="/foods/main" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Qaytish
+                </a>
+                <a href="/edit-profile" class="btn btn-outline-primary">
+                    <i class="fas fa-pen"></i> Profilni tahrirlash
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

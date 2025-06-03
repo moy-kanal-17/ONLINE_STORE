@@ -1,0 +1,78 @@
+/* style.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0; /* Och kulrang fon */
+    color: #333; /* To'q kulrang tekst */
+    overflow: hidden;
+    text-align: center; /* Tekstlarni markazga tekislash */
+}
+
+.container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content h1 {
+    font-size: 8em;
+    margin: 0;
+    color: #ff6347; /* Qizil rang */
+}
+
+.content h2 {
+    font-size: 1.8em;
+    margin-top: -10px;
+    color: #555;
+}
+
+.content p {
+    font-size: 1.1em;
+    color: #666;
+}
+
+/* Tanga konteyneri - tangani markazga joylash uchun */
+.coin-container {
+    margin: 30px auto; /* Yuqori/pastki oralik va gorizontal markazlash */
+    width: 100px; /* Konteyner kengligi, tanga o'lchamiga yaqin */
+    height: 100px; /* Konteyner balandligi */
+    /* Optional: border: 1px solid red; */
+}
+
+/* Tanga rasmi */
+.spinning-coin {
+    width: 100px; /* Tanga kengligi */
+    height: 100px; /* Tanga balandligi */
+    display: block; /* Yondagi bo'shliqlarni olib tashlash */
+    margin: 0 auto; /* Rasmni o'z konteyneri ichida markazlash */
+    animation: spin 2s linear infinite; /* 'spin' animatsiyasini qo'llash */
+}
+
+/* Animatsiya qoidalari */
+@keyframes spin {
+    0% { transform: rotateY(0deg); } /* Boshlang'ich holat */
+    100% { transform: rotateY(360deg); } /* To'liq aylanish (360 daraja) */
+}
+/* Agar vertikal aylanish istasangiz, rotateY o'rniga rotateX dan foydalaning */
+
+
+.home-link {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: #4682b4; /* Ko'k rang */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.home-link:hover {
+    background-color: #5a9ad1;
+}

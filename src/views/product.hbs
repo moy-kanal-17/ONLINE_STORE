@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product.name}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .product-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            width: 90%; /* Kengroq qilib olamiz */
+            max-width: 900px; /* Maksimal kenglik */
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Ikki ustun: rasm va ma'lumot */
+            margin: 20px;
+        }
+
+        .product-image-section {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #eee;
+        }
+
+        .product-image-wrapper {
+            max-width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain; /* Rasm sig'ishi uchun */
+        }
+
+        .product-details {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-details h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .product-info p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .product-info p strong {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .discount {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #545b62;
+        }
+
+        .buy-button {
+            background: linear-gradient(135deg, #007bff, #6610f2);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.5);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 123, 255, 0.7);
+        }
+
+        /* Qo'shimcha stil */
+        .description-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Kichik ekranlar uchun moslashuvchanlik */
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr; /* Bir ustun */
+            }
+            .product-image-section {
+                border-right: none;
+                padding: 20px;
+            }
+            .product-details {
+                padding: 20px;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .back-link, .buy-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <div class="product-image-section">
+            <div class="product-image-wrapper">
+                <img src="/images/{{product.image}}" alt="{{product.name}}" class="product-image" />
+            </div>
+        </div>
+        <div class="product-details">
+            <h1>{{product.name}}</h1>
+            <div class="product-info">
+                <p><strong>Narxi:</strong> {{product.price}} so'm</p>
+                <p><strong>Reyting:</strong> {{product.rating}}</p>
+                <p><strong>Yetkazib berish vaqti:</strong> {{product.delivery_time}}</p>
+                {{#if product.skids}}
+                    <p class="discount"><strong>Skidka:</strong> {{product.skids}}%</p>
+                {{/if}}
+            </div>
+            <h2 class="description-title">Tavsif</h2>
+            <p class="product-info">{{product.describtion}}</p>
+            <div class="actions">
+                <a href="/foods/main" class="back-link">Ortga</a>
+                <button id="buy-button" class="buy-button">Sotib olish</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const userId = 1;
+        const productId = {{product.id}};
+
+        document.getElementById('buy-button').addEventListener('click', async () => {
+            const payData = {
+                customer_id: userId,
+                product_id: productId,
+                terminal: '123456',
+                type: 'card',
+                date: new Date().toISOString(),
+            };
+
+            try {
+                const response = await fetch('/pays', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payData)
+                });
+
+                if (!response.ok) throw new Error('To‘lovni yaratishda xatolik yuz berdi');
+
+                alert('To‘lov muvaffaqiyatli yaratildi!');
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+</html>

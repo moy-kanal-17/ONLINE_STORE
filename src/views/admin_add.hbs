@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link id="bootstrap-theme" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      padding: 30px;
+      background-color: #f8f9fa;
+    }
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .table {
+      background-color: #fff;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    .table thead {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .table thead th {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .table td, .table th {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+    .section {
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="btn btn-dark theme-toggle">🌙 Dark Mode</button>
+
+  <div class="container">
+    <h1>Admin Panel</h1>
+
+    <!-- Admin qo‘shish formasi -->
+    <div class="section">
+      <h2>Yangi Admin qo‘shish</h2>
+      <form id="addAdminForm" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="full_name" class="form-label">To‘liq ism</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" required />
+          <div class="invalid-feedback">Iltimos, to‘liq ismni kiriting.</div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required />
+          <div class="invalid-feedback">Iltimos, to‘g‘ri email kiriting.</div>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Foydalanuvchi nomi (ixtiyoriy)</label>
+          <input type="text" class="form-control" id="username" name="username" />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Parol</label>
+          <input type="password" class="form-control" id="password" name="password" required />
+          <div class="invalid-feedback">Parol kamida 6 belgidan iborat bo‘lishi kerak.</div>
+        </div>
+        <div class="mb-3">
+          <label for="is_active" class="form-label">Faolmi?</label>
+          <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked />
+        </div>
+        <div class="mb-3">
+          <label for="iscreator" class="form-label">Creator (Admin huquqlari)?</label>
+          <input type="checkbox" class="form-check-input" id="iscreator" name="iscreator" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">✅ Admin qo‘shish</button>
+      </form>
+    </div>
+
+    <!-- Adminlar ro‘yxati -->
+    <h2 class="mt-5">Adminlar ro‘yxati</h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>To‘liq ism</th>
+          <th>Email</th>
+          <th>Foydalanuvchi nomi</th>
+          <th>Faolmi?</th>
+          <th>Creator?</th>
+          <th>Rol</th>
+          <th>Amallar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+        <tr>
+          <td>{{this.id}}</td>
+          <td>{{this.full_name}}</td>
+          <td>{{this.email}}</td>
+          <td>{{this.username}}</td>
+          <td>{{#if this.is_active}}Ha{{else}}Yo‘q{{/if}}</td>
+          <td>{{#if this.iscreator}}Ha{{else}}Yo‘q{{/if}}</td>
+          <td>{{this.role}}</td>
+          <td>
+            <form action="/users/delete/{{this.id}}" method="POST" onsubmit="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')">
+              <button type="submit" class="btn btn-danger btn-lg">🗑 O‘chirish</button>
+            </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Formani validatsiya qilish
+    (function () {
+      'use strict';
+      const form = document.getElementById('addAdminForm');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          return;
+        }
+
+        const formData = new FormData(form);
+        const data = {
+          full_name: formData.get('full_name'),
+          email: formData.get('email'),
+          username: formData.get('username') || undefined,
+          password: formData.get('password'),
+          is_active: formData.get('is_active') === 'on',
+          iscreator: formData.get('iscreator') === 'on',
+        };
+
+        try {
+          const response = await fetch('/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Xato: ${response.status}`);
+          }
+
+          const result = await response.json();
+          alert('Admin muvaffaqiyatli qo‘shildi!');
+          window.location.reload(); // Ro‘yxatni yangilash
+        } catch (error) {
+          console.error('Xato:', error);
+          alert('Admin qo‘shishda xato: ' + error.message);
+        }
+      }, false);
+    })();
+
+    // Tema o‘zgartirish
+    const themeToggle = document.getElementById('themeToggle');
+    const bootstrapLink = document.getElementById('bootstrap-theme');
+    const darkTheme = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/darkly/bootstrap.min.css';
+    const lightTheme = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      bootstrapLink.href = darkTheme;
+      themeToggle.textContent = '🌞 Light Mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = bootstrapLink.href.includes('darkly');
+      if (isDark) {
+        bootstrapLink.href = lightTheme;
+        themeToggle.textContent = '🌙 Dark Mode';
+        localStorage.setItem('theme', 'light');
+      } else {
+        bootstrapLink.href = darkTheme;
+        themeToggle.textContent = '🌞 Light Mode';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
+</body>
+</html>
+{{! End of src/views/admin.hbs }}

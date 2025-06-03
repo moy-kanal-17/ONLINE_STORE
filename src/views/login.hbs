@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Header - logo va nom */
+    header {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    header img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      margin: 0;
+      user-select: none;
+    }
+
+    .background-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      filter: blur(80px);
+      animation: floatUpDown 12s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    .circle1 {
+      width: 350px;
+      height: 350px;
+      top: 20%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+    .circle2 {
+      width: 450px;
+      height: 450px;
+      bottom: 10%;
+      right: 15%;
+      animation-delay: 4s;
+    }
+    .circle3 {
+      width: 300px;
+      height: 300px;
+      top: 50%;
+      right: 40%;
+      animation-delay: 7s;
+    }
+    @keyframes floatUpDown {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-40px);
+      }
+    }
+
+    /* Login form */
+    .login-form {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      width: 350px;
+      z-index: 1;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+    .login-form h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 600;
+      letter-spacing: 1.1px;
+    }
+    .login-form input,
+    .login-form select,
+    .login-form button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(20, 18, 18, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #211d1d;
+      font-size: 16px;
+      transition: background 0.3s, border-color 0.3s;
+      box-sizing: border-box;
+    }
+    .login-form input::placeholder,
+    .login-form select {
+      color: #ddd;
+    }
+    .login-form input:focus,
+    .login-form select:focus {
+      outline: none;
+      background: rgba(0, 0, 0, 0.2);
+      border-color: #4caf50;
+      color: #262020;
+    }
+    .login-form button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      margin-top: 24px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    .login-form button:hover {
+      background-color: #45a049;
+    }
+    .error {
+      margin-top: 14px;
+      color: #ff6b6b;
+      font-weight: 600;
+      text-align: center;
+    }
+    @media (max-width: 400px) {
+  .login-form {
+    width: 90%;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  header {
+    padding: 15px 20px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+
+  header img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+</head>
+<body>
+  <header>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <img src="/logo.png" alt="Logo" />
+    <h1>MySite</h1>
+  </header>
+
+  <div class="background-circle circle1"></div>
+  <div class="background-circle circle2"></div>
+  <div class="background-circle circle3"></div>
+
+  <form class="login-form" action="/auth/login" method="POST">
+    <h2>Kirish</h2>
+    <input type="email" name="email" placeholder="Email" required value="{{data.email}}" />
+    <input type="password" name="password" placeholder="Parol" required />
+    <select name="role" required>
+      <option value="">Rolni tanlang</option>
+      <option value="customer" {{#if (eq data.role "customer")}}selected{{/if}}>Customer</option>
+      <option value="creator" {{#if (eq data.role "creator")}}selected{{/if}}>Creator</option>
+      <option value="seller" {{#if (eq data.role "seller")}}selected{{/if}}>Seller</option>
+      <option value="admin" {{#if (eq data.role "admin")}}selected{{/if}}>Admin</option>
+
+    </select>
+    <button type="submit">Kirish</button>
+    {{#if error}}
+      <p class="error">{{error}}</p>
+    {{/if}}
+
+    <p>hali accauntiz yoqmi? unda <a href="/auth/registri">registri qiling</a></p>
+  </form>
+</body>
+</html>

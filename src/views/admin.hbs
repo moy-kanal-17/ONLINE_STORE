@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{title}}</title>
+  <link id="bootstrap-theme" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Your existing styles remain unchanged */
+    body {
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .table thead th {
+      font-size: 1.1rem;
+    }
+    .btn-lg {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+    .section {
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      margin-bottom: 40px;
+    }
+    .table {
+      background-color: #1c1c1c;
+      color: #ffffff;
+      font-size: 1.1rem;
+    }
+    .table thead {
+      background-color: #333;
+    }
+    .table thead th {
+      color: #00ff88;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .table td, .table th {
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="btn btn-dark theme-toggle">🌙 Dark Mode</button>
+
+  <div class="container">
+    <h1>{{title}}</h1>
+
+    <h2 class="mt-5">Foydalanuvchilar ro'yxati</h2>
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Ism</th>
+          <th>Familiya</th>
+          <th>Email</th>
+          <th>Amallar</th>
+        </tr>
+      </thead>
+      <a href="/admins/creator">ADMIN ADD !!! FAQAT CREATOR UCHUN!! (GUARD bor ushaning uchun odiy admin kirolmiydi)</a>
+      
+      <tbody>
+        {{#each users}}
+        <tr>
+          <td>{{this.id}}</td>
+          <td>{{this.first_name}}</td>
+          <td>{{this.last_name}}</td>
+          <td>{{this.email}}</td>
+          <td>
+            <form action="/customers/{{this.id}}" method="POST" onsubmit="return confirm('Haqiqatan ham o\'chirmoqchimisiz?')">
+              <button type="submit" class="btn btn-danger btn-lg">🗑 O'chirish</button>
+            </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <h2 class="mt-5">Mahsulotlar ro'yxati</h2>
+    <button class="btn btn-success btn-lg mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">➕ Yangi mahsulot qo'shish</button>
+
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nomi</th>
+          <th>Narxi</th>
+          <th>Qisqacha tavsif</th>
+          <th>Amallar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{this.id}}</td>
+          <td>{{this.name}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.description}}</td>
+          <td>
+            <a href="#" class="btn btn-primary btn-lg edit-product-btn" data-bs-toggle="modal" data-bs-target="#editProductModal" data-product-id="{{this.id}}">✏ Tahrirlash</a>
+            <form action="/foods/delete/{{this.id}}" method="POST" class="d-inline" onsubmit="return confirm('Haqiqatan ham o\'chirmoqchimisiz?')">
+              <button type="submit" class="btn btn-danger btn-lg">🗑 O'chirish</button>
+            </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Product Modal -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="/foods/" method="POST" enctype="multipart/form-data" class="modal-content">
+        <input type="hidden" name="author" value="1" />
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProductLabel">🛒 Yangi mahsulot</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="image" class="form-label">📷 Rasm</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*" required />
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">🔤 Mahsulot nomi</label>
+            <input type="text" class="form-control" id="name" name="name" required />
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">💰 Narxi</label>
+            <input type="number" class="form-control" id="price" name="price" required />
+          </div>
+          <div class="mb-3">
+            <label for="describtion" class="form-label">📄 Qisqacha tavsif</label>
+            <textarea class="form-control" id="describtion" name="describtion" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">❌ Bekor qilish</button>
+          <button type="submit" class="btn btn-primary btn-lg">✅ Qo'shish</button>
+        </div>
+      <input type="hidden" name="seller_id" value={{this.admin}} />
+
+      </form>
+    </div>
+  </div>
+
+ <!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="editProductForm" method="POST" class="modal-content">
+      <input type="hidden" name="id" id="editProductId">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProductLabel">✏ Mahsulotni tahrirlash</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="editAuthor" class="form-label">👤 Muallif ID</label>
+          <input type="number" class="form-control" id="editAuthor" name="author" required />
+        </div>
+        <div class="mb-3">
+          <label for="editName" class="form-label">🔤 Mahsulot nomi</label>
+          <input type="text" class="form-control" id="editName" name="name" required />
+        </div>
+        <div class="mb-3">
+          <label for="editPrice" class="form-label">💰 Narxi</label>
+          <input type="number" class="form-control" id="editPrice" name="price" required />
+        </div>
+        <div class="mb-3">
+          <label for="editDescription" class="form-label">📄 Qisqacha tavsif</label>
+          <textarea class="form-control" id="editDescription" name="describtion" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">❌ Bekor qilish</button>
+        <button type="submit" class="btn btn-primary btn-lg">💾 Saqlash</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    const bootstrapLink = document.getElementById("bootstrap-theme");
+
+    const darkTheme = "https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/darkly/bootstrap.min.css";
+    const lightTheme = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css";
+
+    // LocalStorage'dan tekshirish
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      bootstrapLink.href = darkTheme;
+      themeToggle.textContent = "🌞 Light Mode";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const isDark = bootstrapLink.href.includes("darkly");
+      if (isDark) {
+        bootstrapLink.href = lightTheme;
+        themeToggle.textContent = "🌙 Dark Mode";
+        localStorage.setItem("theme", "light");
+      } else {
+        bootstrapLink.href = darkTheme;
+        themeToggle.textContent = "🌞 Light Mode";
+        localStorage.setItem("theme", "dark");
+      }
+    });
+
+const editProductModalElement = document.getElementById('editProductModal');
+  if (editProductModalElement) {
+    editProductModalElement.addEventListener('show.bs.modal', event => {
+      const button = event.relatedTarget;
+      const productId = button.getAttribute('data-product-id');
+      console.log('Product ID:', productId); // Для отладки
+
+      if (!productId || isNaN(parseInt(productId))) {
+        console.error('Invalid product ID:', productId);
+        alert('Некорректный ID продукта!');
+        return;
+      }
+
+      fetch(`/foods/foods/${productId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Response is not JSON');
+          }
+          return response.json();
+        })
+        .then(product => {
+          document.getElementById('editProductId').value = product.id;
+          document.getElementById('editName').value = product.name || '';
+          document.getElementById('editPrice').value = product.price || '';
+          document.getElementById('editDescription').value = product.describtion || '';
+          document.getElementById('editAuthor').value = product.seller_id || '1';
+          const editProductForm = document.getElementById('editProductForm');
+          editProductForm.action = `/foods/update/${product.id}`;
+        })
+        .catch(error => {
+          console.error('Ошибка загрузки данных:', error);
+          alert('Ошибка загрузки данных продукта! Подробности: ' + error.message);
+        });
+    });
+  }
+</script>
+</body>
+</html>
+{{!-- zor dasturchidan zor kurs,Abduqodir esa nest js otadi --}}

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ro'yxatdan o'tish</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    header {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    header img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      margin: 0;
+      user-select: none;
+    }
+    .background-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      filter: blur(80px);
+      animation: floatUpDown 12s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    .circle1 { width: 350px; height: 350px; top: 20%; left: 15%; animation-delay: 0s; }
+    .circle2 { width: 450px; height: 450px; bottom: 10%; right: 15%; animation-delay: 4s; }
+    .circle3 { width: 300px; height: 300px; top: 50%; right: 40%; animation-delay: 7s; }
+    @keyframes floatUpDown {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-40px); }
+    }
+    .register-form {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      width: 350px;
+      z-index: 1;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+    .register-form h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 600;
+      letter-spacing: 1.1px;
+      color: #00ff88;
+    }
+    .register-form input,
+    .register-form select,
+    .register-form button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #ddd;
+      font-size: 16px;
+      transition: background 0.3s, border-color 0.3s;
+      box-sizing: border-box;
+    }
+    .register-form input::placeholder,
+    .register-form select {
+      color: #aaa;
+    }
+    .register-form input:focus,
+    .register-form select:focus {
+      outline: none;
+      background: rgba(0, 0, 0, 0.2);
+      border-color: #4caf50;
+      color: #fff;
+    }
+    .register-form button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      margin-top: 24px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    .register-form button:hover {
+      background-color: #45a049;
+    }
+    .error {
+      margin-top: 14px;
+      color: #ff6b6b;
+      font-weight: 600;
+      text-align: center;
+      font-size: 14px;
+    }
+    .form-group {
+      display: flex;
+      gap: 10px;
+    }
+    .form-group input {
+      width: calc(50% - 5px);
+    }
+    .error-field {
+      border-color: #ff6b6b !important;
+    }
+    a {
+      color: #00ff88;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 400px) {
+      .register-form { width: 90%; padding: 20px; margin-top: 20px; }
+      header { padding: 15px 20px; }
+      header h1 { font-size: 20px; }
+      header img { width: 30px; height: 30px; }
+      .form-group { flex-direction: column; gap: 0; }
+      .form-group input { width: 100%; margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/logo.png" alt="Logo" />
+    <h1>MySite</h1>
+  </header>
+
+  <div class="background-circle circle1"></div>
+  <div class="background-circle circle2"></div>
+  <div class="background-circle circle3"></div>
+
+  <form class="register-form" id="registerForm" action="/auth/register" method="POST">
+    <h2>Ro'yxatdan o'tish</h2>
+    <select name="role" id="role" required>
+      <option value="">Rolni tanlang</option>
+      <option value="customer">Customer</option>
+      <option value="seller">Seller</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <div id="customer-seller-fields">
+      <div class="form-group">
+        <input type="text" name="first_name" id="first_name" placeholder="Ism" />
+        <input type="text" name="last_name" id="last_name" placeholder="Familiya" />
+      </div>
+      <input type="text" name="phone_number" id="phone_number" placeholder="Telefon raqami" />
+      <input type="text" name="adress" id="adress" placeholder="Manzil (ixtiyoriy)" />
+    </div>
+
+    <div id="admin-fields" style="display: none;">
+      <input type="text" name="full_name" id="full_name" placeholder="To'liq ism" />
+    </div>
+
+    <input type="email" name="email" id="email" placeholder="Email" required />
+    <input type="password" name="password" id="password" placeholder="Parol" required />
+    <button type="submit">Ro'yxatdan o'tish</button>
+    {{#if error}}
+      <p class="error">{{error}}</p>
+    {{/if}}
+    <p style="text-align: center; margin-top: 15px;">Akkauntingiz bormi? <a href="/auth/login">Login qiling</a></p>
+  </form>
+
+  <script>
+    const registerForm = document.querySelector('#registerForm');
+    const roleSelect = document.getElementById('role');
+    const customerSellerFields = document.getElementById('customer-seller-fields');
+    const adminFields = document.getElementById('admin-fields');
+    const errorDiv = document.createElement('p');
+    errorDiv.className = 'error';
+
+    function validateForm() {
+      let isValid = true;
+      const role = roleSelect.value;
+      const inputs = registerForm.querySelectorAll('input, select');
+
+      inputs.forEach(input => input.classList.remove('error-field'));
+
+      if (!role) {
+        errorDiv.textContent = 'Iltimos, rolni tanlang!';
+        roleSelect.classList.add('error-field');
+        isValid = false;
+      }
+
+      if (role === 'admin') {
+        const fullName = document.getElementById('full_name').value.trim();
+        if (!fullName) {
+          errorDiv.textContent = 'To\'liq ismni kiriting!';
+          document.getElementById('full_name').classList.add('error-field');
+          isValid = false;
+        }
+      } else {
+        const firstName = document.getElementById('first_name').value.trim();
+        const lastName = document.getElementById('last_name').value.trim();
+        if (!firstName) {
+          errorDiv.textContent = 'Ismni kiriting!';
+          document.getElementById('first_name').classList.add('error-field');
+          isValid = false;
+        }
+        if (!lastName) {
+          errorDiv.textContent = 'Familiyani kiriting!';
+          document.getElementById('last_name').classList.add('error-field');
+          isValid = false;
+        }
+        if (role === 'seller') {
+          const phoneNumber = document.getElementById('phone_number').value.trim();
+          const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+          if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
+            errorDiv.textContent = 'Telefon raqami noto\'g\'ri formatda!';
+            document.getElementById('phone_number').classList.add('error-field');
+            isValid = false;
+          }
+        }
+      }
+
+      const email = document.getElementById('email').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        errorDiv.textContent = 'Email noto\'g\'ri formatda!';
+        document.getElementById('email').classList.add('error-field');
+        isValid = false;
+      }
+
+      const password = document.getElementById('password').value;
+      if (!password || password.length < 6) {
+        errorDiv.textContent = 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak!';
+        document.getElementById('password').classList.add('error-field');
+        isValid = false;
+      }
+
+      if (!isValid && !registerForm.contains(errorDiv)) {
+        registerForm.appendChild(errorDiv);
+      } else if (isValid && registerForm.contains(errorDiv)) {
+        errorDiv.remove();
+      }
+
+      return isValid;
+    }
+
+    roleSelect.addEventListener('change', function() {
+      registerForm.action = `/auth/register/${this.value}`;
+      const firstNameInput = document.getElementById('first_name');
+      const lastNameInput = document.getElementById('last_name');
+      const phoneInput = document.getElementById('phone_number');
+      const fullNameInput = document.getElementById('full_name');
+
+      if (this.value === 'admin') {
+        customerSellerFields.style.display = 'none';
+        adminFields.style.display = 'block';
+        if (firstNameInput) firstNameInput.removeAttribute('required');
+        if (lastNameInput) lastNameInput.removeAttribute('required');
+        if (phoneInput) phoneInput.removeAttribute('required');
+        if (fullNameInput) fullNameInput.setAttribute('required', 'required');
+      } else {
+        customerSellerFields.style.display = 'block';
+        adminFields.style.display = 'none';
+        if (firstNameInput) firstNameInput.setAttribute('required', 'required');
+        if (lastNameInput) lastNameInput.setAttribute('required', 'required');
+        if (this.value === 'seller' && phoneInput) {
+          phoneInput.setAttribute('required', 'required');
+        } else if (phoneInput) {
+          phoneInput.removeAttribute('required');
+        }
+        if (fullNameInput) fullNameInput.removeAttribute('required');
+      }
+    });
+
+    registerForm.addEventListener('submit', event => {
+      if (!validateForm()) {
+        event.preventDefault();
+      } else {
+        console.log('Form data:', Object.fromEntries(new FormData(registerForm)));
+      }
+    });
+  </script>
+</body>
+</html>
