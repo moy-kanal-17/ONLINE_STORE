@@ -1,145 +1,614 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{this.title}}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
   <link id="bootstrap-theme" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-<style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/public/favicon.ico" type="image/x-icon" />
+  <style>
+    :root {
+      --primary: #ff4500;
+      --secondary: #00b4d8;
+      --accent: #ffd700;
+      --dark: #1a1a1a;
+      --light: #fff;
+      --smart: #28a745;
+      --gradient-bg: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-        padding: 20px;
-        background-color: #e9ecef; /* Ochiq kulrang fon */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Zamonaviy shrift */
-        color: #495057; /* To'q kulrang matn */
+      font-family: 'Montserrat', sans-serif;
+      background: var(--gradient-bg);
+      color: var(--dark);
+      overflow-x: hidden;
     }
-    h1, h2 {
-        color: #343a40; /* To'qroq sarlavhalar */
-        margin-bottom: 20px;
-        text-align: center;
+
+    /* Header */
+    header {
+      background: var(--light);
+      padding: 1.5rem 3rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: slideDown 0.5s ease-out;
     }
-    h2 {
-        margin-top: 30px;
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
     }
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+    .logo a {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s, transform 0.3s;
     }
-    .table {
-        background-color: #fff;
-        color: #495057;
-        font-size: 0.9rem;
-        border-radius: 6px;
-        overflow: hidden; /* Chegaralar uchun */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+    .logo a:hover {
+      color: var(--secondary);
+      transform: scale(1.05);
     }
-    .table thead {
-        background-color: #007bff; /* Asosiy rang */
-        color: #fff;
-    }
-    .table thead th {
-        font-size: 1rem;
-        text-align: center;
-        padding: 12px 15px;
-        border-bottom: 2px solid #0056b3;
-    }
-    .table td, .table th {
-        text-align: center;
-        vertical-align: middle;
-        padding: 10px 15px;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .table tbody tr:nth-child(even) {
-        background-color: #f8f9fa; /* Har xil qatorlar uchun fon */
-    }
+
     .theme-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: background-color 0.3s ease;
+      padding: 0.8rem 1.5rem;
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
     }
-    .btn-dark {
-        background-color: #343a40;
-        color: #fff;
+
+    .theme-toggle:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
     }
-    .btn-dark:hover {
-        background-color: #1d2124;
+
+    /* Hero Banner */
+    .hero-banner {
+      background: var(--gradient-bg);
+      color: var(--light);
+      padding: 2rem;
+      text-align: center;
+      margin: 1rem auto;
+      max-width: 1280px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-out;
     }
+
+    .hero-banner h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Pop-up Banners */
+    .popup-banner {
+      position: fixed;
+      top: 20px;
+      right: -100%;
+      max-width: 350px;
+      background: var(--light);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      z-index: 2000;
+      display: none;
+      animation: slideInRight 0.5s ease-out forwards;
+    }
+
+    .popup-banner.active {
+      display: block;
+      right: 20px;
+    }
+
+    @keyframes slideInRight {
+      from { right: -100%; }
+      to { right: 20px; }
+    }
+
+    .popup-banner h3 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .popup-banner p {
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+
+    .popup-banner a {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      background: var(--primary);
+      color: var(--light);
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .popup-banner a:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      color: var(--dark);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .popup-close:hover {
+      color: var(--primary);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--light);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Section */
     .section {
-        padding: 25px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 30px;
-        border: 1px solid #e0e0e0;
+      padding: 2rem;
+      background: var(--light);
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
+
     .section h2 {
-        text-align: left;
-        margin-bottom: 20px;
-        color: #007bff;
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
     }
+
+    /* Form */
     .form-label {
-        font-weight: bold;
-        color: #495057;
+      font-weight: 600;
+      color: var(--dark);
     }
+
     .form-control {
-        border-radius: 5px;
-        border: 1px solid #ced4da;
+      border-radius: 10px;
+      border: 2px solid var(--primary);
+      padding: 0.8rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
+
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+      border-color: var(--secondary);
+      box-shadow: 0 0 10px rgba(0,180,255,0.3);
     }
+
     .btn-primary {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: 50px;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.3s;
     }
+
     .btn-primary:hover {
-        background-color: #0056b3;
+      background: var(--secondary);
+      transform: translateY(-3px);
     }
+
+    .btn-danger, .btn-info {
+      border-radius: 50px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.3s;
+    }
+
     .btn-danger {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+      background: #dc3545;
+      color: var(--light);
     }
+
     .btn-danger:hover {
-        background-color: #c82333;
+      background: #c82333;
+      transform: translateY(-3px);
     }
-</style>
+
+    .btn-info {
+      background: var(--secondary);
+      color: var(--light);
+    }
+
+    .btn-info:hover {
+      background: #008a9e;
+      transform: translateY(-3px);
+    }
+
+    /* Table */
+    .table {
+      background: var(--light);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .table thead {
+      background: var(--primary);
+      color: var(--light);
+      font-weight: 600;
+    }
+
+    .table thead th {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .table td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background: rgba(255,255,255,0.9);
+    }
+
+    .table tbody tr:hover {
+      background: var(--primary);
+      color: var(--light);
+    }
+
+    /* Chat Bot (Toxic) */
+    .chat-bot.toxic {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 2000;
+    }
+
+    .chat-toggle.toxic {
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .chat-toggle.toxic:hover {
+      background: var(--secondary);
+      transform: scale(1.2);
+    }
+
+    /* Chat Bot (Smart) */
+    .chat-bot.smart {
+      position: fixed;
+      bottom: 20px;
+      right: 100px;
+      z-index: 2000;
+    }
+
+    .chat-toggle.smart {
+      background: var(--smart);
+      color: var(--light);
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .chat-toggle.smart:hover {
+      background: #218838;
+      transform: scale(1.2);
+    }
+
+    .chat-box {
+      display: none;
+      width: 350px;
+      height: 500px;
+      background: var(--light);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      flex-direction: column;
+    }
+
+    .chat-box.active {
+      display: flex;
+    }
+
+    .chat-header.toxic {
+      background: var(--primary);
+      color: var(--light);
+      padding: 1rem;
+      border-radius: 20px 20px 0 0;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header.smart {
+      background: var(--smart);
+      color: var(--light);
+      padding: 1rem;
+      border-radius: 20px 20px 0 0;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-close {
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .chat-close:hover {
+      color: var(--accent);
+    }
+
+    .chat-body {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+    }
+
+    .message.user {
+      text-align: right;
+    }
+
+    .message.user span {
+      background: var(--primary);
+      color: var(--light);
+      padding: 0.8rem 1.2rem;
+      border-radius: 15px 5px 15px 15px;
+      display: inline-block;
+      max-width: 80%;
+    }
+
+    .message.bot.toxic span {
+      background: var(--secondary);
+      color: var(--light);
+      padding: 0.8rem 1.2rem;
+      border-radius: 5px 15px 15px 5px;
+      display: inline-block;
+      max-width: 80%;
+    }
+
+    .message.bot.smart span {
+      background: var(--smart);
+      color: var(--light);
+      padding: 0.8rem 1.2rem;
+      border-radius: 5px 15px 15px 5px;
+      display: inline-block;
+      max-width: 80%;
+    }
+
+    .chat-footer {
+      padding: 1rem;
+      border-top: 2px solid #e0e0e0;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .chat-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      resize: none;
+      transition: border-color 0.3s;
+    }
+
+    .chat-input.smart {
+      border-color: var(--smart);
+    }
+
+    .chat-input:focus {
+      border-color: var(--secondary);
+      outline: none;
+    }
+
+    .chat-input.smart:focus {
+      border-color: #218838;
+    }
+
+    .file-upload {
+      border: none;
+      background: none;
+      font-size: 1.2rem;
+      color: var(--primary);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .file-upload.smart {
+      color: var(--smart);
+    }
+
+    .file-upload:hover {
+      color: var(--secondary);
+    }
+
+    .file-upload.smart:hover {
+      color: #218838;
+    }
+
+    .chat-footer button {
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .chat-footer button.smart {
+      background: var(--smart);
+    }
+
+    .chat-footer button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .chat-footer button.smart:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    /* Modal */
+    .modal-content {
+      background: var(--light);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: var(--primary);
+    }
+
+    #modalTitle {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    #storyContent {
+      font-size: 1rem;
+      color: var(--dark);
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+      .hero-banner h1 {
+        font-size: 1.8rem;
+      }
+      .popup-banner, .chat-box {
+        max-width: 90%;
+        right: 10px !important;
+      }
+      .table {
+        font-size: 0.8rem;
+      }
+      .table td, .table th {
+        padding: 0.5rem;
+      }
+      .chat-bot.smart {
+        bottom: 100px;
+        right: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <button id="themeToggle" class="btn btn-dark theme-toggle">🌙 Dark Mode</button>
+  <!-- Header -->
+  <header>
+    <div class="logo"><a href="/main">MY17Shop Admin</a></div>
+    <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
+  </header>
 
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <h1>MY17Shop Admin — Rvi sistemu!</h1>
+  </div>
+
+  <!-- Pop-up Banners -->
+  <div class="popup-banner" id="popup1">
+    <span class="popup-close" onclick="closePopup('popup1')">×</span>
+    <h3>Vam interesen @MOY17Bot??</h3>
+    <p>Zabiray skidki v nashem Telegram-bote!</p>
+    <a href="https://t.me/MOY_17_BOT">Prisoedinyaysya!</a>
+  </div>
+  <div class="popup-banner" id="popup2">
+    <span class="popup-close" onclick="closePopup('popup2')">×</span>
+    <h3>Bizning Telegram kanallarimiz!</h3>
+    <p>Yangiliklar va takliflar: @uzgame_pc va @varenoma</p>
+    <a href="https://t.me/uzgame_pc">Obuna bo'lish!</a>
+  </div>
+
+  <!-- Container -->
   <div class="container">
-
-<h2>Adminlar</h2>
-<ul>
-    {{#each admins}}
-    <li>{{this.full_name}}</li>
-    {{/each}}
-</ul>
-
-<h1><a href="/foods/admin"><button class="btn btn-primary btn-lg">Odiy Admin Panelga otish</button></a></h1>
-
     <!-- Admin qo‘shish formasi -->
     <div class="section">
       <h2>Yangi Admin qo‘shish</h2>
@@ -171,7 +640,7 @@
           <label for="iscreator" class="form-label">Creator (Admin huquqlari)?</label>
           <input type="checkbox" class="form-check-input" id="iscreator" name="iscreator" />
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">✅ Admin qo‘shish</button>
+        <button type="submit" class="btn btn-primary">✅ Admin qo‘shish</button>
       </form>
     </div>
 
@@ -201,8 +670,9 @@
           <td>{{#if this.iscreator}}Ha{{else}}Yo‘q{{/if}}</td>
           <td>{{this.role}}</td>
           <td>
-            <form action="/admins/delete/{{this.id}}" method="POST" onsubmit="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')">
-              <button type="submit" class="btn btn-danger btn-lg">🗑 O‘chirish</button>
+            <button class="btn btn-info" onclick="getAdminStory('{{this.full_name}}', '{{this.email}}', '{{this.username}}', '{{this.is_active}}', '{{this.iscreator}}', '{{this.role}}')">📖 Рассказ</button>
+            <form action="/admins/delete/{{this.id}}" method="POST" onsubmit="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')" style="display:inline;">
+              <button type="submit" class="btn btn-danger">🗑 O‘chirish</button>
             </form>
           </td>
         </tr>
@@ -211,15 +681,69 @@
     </table>
   </div>
 
+  <!-- Toxic Chat Bot -->
+  <div class="chat-bot toxic">
+    <button class="chat-toggle toxic" onclick="toggleChat('toxicChatBox')"><i class="fas fa-robot"></i></button>
+    <div class="chat-box" id="toxicChatBox">
+      <div class="chat-header toxic">
+        <span>Toxic Bot</span>
+        <span class="chat-close" onclick="toggleChat('toxicChatBox')">×</span>
+      </div>
+      <div class="chat-body" id="toxicChatBody"></div>
+      <div class="chat-footer">
+        <textarea class="chat-input" id="toxicChatInput" placeholder="So‘ra, lekin aqlli so‘ra!"></textarea>
+        <input type="file" id="toxicChatImage" accept="image/jpeg,image/png" style="display:none;" />
+        <label for="toxicChatImage" class="file-upload"><i class="fas fa-upload"></i></label>
+        <button onclick="sendMessage('toxic')">➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Smart Chat Bot -->
+  <div class="chat-bot smart">
+    <button class="chat-toggle smart" onclick="toggleChat('smartChatBox')"><i class="fas fa-brain"></i></button>
+    <div class="chat-box" id="smartChatBox">
+      <div class="chat-header smart">
+        <span>Smart Manager</span>
+        <span class="chat-close" onclick="toggleChat('smartChatBox')">×</span>
+      </div>
+      <div class="chat-body" id="smartChatBody"></div>
+      <div class="chat-footer">
+        <textarea class="chat-input smart" id="smartChatInput" placeholder="Savol bering, maslahat beraman!"></textarea>
+        <input type="file" id="smartChatImage" accept="image/jpeg,image/png" style="display:none;" />
+        <label for="smartChatImage" class="file-upload smart"><i class="fas fa-upload"></i></label>
+        <button class="smart" onclick="sendMessage('smart')">➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Admin Story -->
+  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Admin haqida hikoya</h5>
+          <button type="button" class="modal-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body">
+          <div id="storyContent">Yuklanmoqda...</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Yopish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Formani validatsiya qilish
     (function () {
       'use strict';
       const form = document.getElementById('addAdminForm');
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
         if (!form.checkValidity()) {
           form.classList.add('was-validated');
@@ -251,8 +775,8 @@
           }
 
           const result = await response.json();
-          alert('Admin muvaffaqiyatli qo‘shildi!');
-          window.location.reload(); // Ro‘yxatni yangilash
+          alert('✅ Admin muvaffaqiyatli qo‘shildi!');
+          window.location.reload();
         } catch (error) {
           console.error('Xato:', error);
           alert('Admin qo‘shishda xato: ' + error.message);
@@ -276,7 +800,7 @@
       const isDark = bootstrapLink.href.includes('darkly');
       if (isDark) {
         bootstrapLink.href = lightTheme;
-        themeToggle.textContent = '🌙 Dark Mode';
+        themeToggle.textContent = '🌙 Moon Darkly';
         localStorage.setItem('theme', 'light');
       } else {
         bootstrapLink.href = darkTheme;
@@ -284,7 +808,141 @@
         localStorage.setItem('theme', 'dark');
       }
     });
+
+    // Pop-up Banner Logic
+    const popups = [
+      { id: 'popup1', delay: 5000 },
+      { id: 'popup2', delay: 20000 },
+    ];
+
+    function showPopup(id) {
+      const popup = document.getElementById(id);
+      popup.classList.add('active');
+      setTimeout(() => popup.classList.remove('active'), 15000);
+    }
+
+    function closePopup(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    popups.forEach(p => {
+      setTimeout(() => {
+        showPopup(p.id);
+        setInterval(() => showPopup(p.id), 60000);
+      }, p.delay);
+    });
+
+    // Admin Story
+    async function getAdminStory(fullName, email, username, isActive, isCreator, role) {
+      const storyContent = document.getElementById('storyContent');
+      storyContent.textContent = 'Yuklanmoqda...';
+      const storyModal = new bootstrap.Modal(document.getElementById('storyModal'));
+      storyModal.show();
+
+      const prompt = `${fullName} s email ${email}. Username: ${username || 'yoq hali'}. Aktiven: ${isActive ? 'HA' : 'YOQ'}. Creator: ${isCreator ? 'creatorman' : 'creatormasman'}. Rol: ${role || 'creator'}.mana mani malumotlarim man haqimda uzb tilida gapirib ber ! bu man haqimda malumotlar MOY17Shop dan.`;
+console.log(prompt);
+      try {
+        const response = await fetch('http://localhost:8000/ask-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt }),
+        });
+
+        if (!response.ok) throw new Error(`Xato: ${response.status}`);
+        const data = await response.json();
+        storyContent.textContent = data.reply;
+      } catch (error) {
+        console.error('Xato:', error);
+        storyContent.textContent = 'Hikoya olishda xato: ' + error.message;
+      }
+    }
+
+    // Chat Bot Logic
+    function toggleChat(chatBoxId) {
+      const chatBox = document.getElementById(chatBoxId);
+      const otherChatBox = chatBoxId === 'toxicChatBox' ? 'smartChatBox' : 'toxicChatBox';
+      document.getElementById(otherChatBox).classList.remove('active');
+      chatBox.classList.toggle('active');
+    }
+
+    async function sendMessage(type) {
+      const isToxic = type === 'toxic';
+      const chatInput = document.getElementById(`${type}ChatInput`);
+      const chatImage = document.getElementById(`${type}ChatImage`);
+      const chatBody = document.getElementById(`${type}ChatBody`);
+      const message = chatInput.value.trim();
+      const image = chatImage.files[0];
+
+      if (!message && !image) return;
+
+      // User Message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.innerHTML = `<span>${message || 'Rasm yuborildi'}</span>`;
+      chatBody.appendChild(userMessage);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      chatInput.value = '';
+
+      try {
+        let response;
+        let prompt = message;
+        if (!isToxic) {
+          console.log('Toxic bot Deactivated');
+
+          prompt = `aqiliy bola bolip zor tinch zor sobesednik bolib javob ber ,savol: ${message}`;
+        }
+        if(isToxic){
+          console.log('Toxic bot activated');
+          prompt = `UDA SOKIN VA ANIQ JAVOB BER, FAQAT SOVOLGA JAVOB BER, SOVOLNING O'ZINI TAKRORLAMA. SOVOL: ${message || 'Opishi etot huy'}`;
+        }
+
+        if (image) {
+          const formData = new FormData();
+          formData.append('prompt', isToxic ? (message || 'Opishi etot huy') : prompt);
+          formData.append('image', image);
+
+          response = await fetch('http://localhost:8000/ask-image', {
+            method: 'POST',
+            body: formData,
+          });
+        } else {
+          response = await fetch('http://localhost:8000/ask-text', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt }),
+          });
+        }
+
+        if (!response.ok) throw new Error(`Xato: ${response.status}`);
+        const data = await response.json();
+
+        const botMessage = document.createElement('div');
+        botMessage.className = `message bot ${type}`;
+        botMessage.innerHTML = `<span>${data.reply}</span>`;
+        chatBody.appendChild(botMessage);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      } catch (error) {
+        console.error('Xato:', error);
+        const botMessage = document.createElement('div');
+        botMessage.className = `message bot ${type}`;
+        botMessage.innerHTML = `<span>Xato: ${error.message}</span>`;
+        chatBody.appendChild(botMessage);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      chatImage.value = '';
+    }
+
+    // Enter key for chats
+    ['toxic', 'smart'].forEach(type => {
+      document.getElementById(`${type}ChatInput`).addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage(type);
+        }
+      });
+    });
   </script>
 </body>
 </html>
-{{! End of src/views/admin.hbs }}

@@ -31,7 +31,7 @@ export class SellerhGuard implements CanActivate {
       request['user'] = payload;
      
 
-      if(payload.role !== 'seller') {
+      if(payload.role !== 'seller' && payload.role !== 'admin' && payload.role !== 'creator') {
         console.log('User is not an seller');
         response.redirect('/auth/login');
         return false;

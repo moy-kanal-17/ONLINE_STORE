@@ -16,6 +16,7 @@ import { RoleRedirectGuard } from "src/common/guards/role.guard";
 import { CustomerService } from "src/customer/customer.service";
 import { SellerhGuard } from "src/common/guards/seller.guard";
 import { RequestWithUser } from "src/common/types/request-with-user";
+import { ActiveUserGuard } from "src/common/guards/ActiveUser.guard";
 
 @Controller("foods")
 export class FoodController {

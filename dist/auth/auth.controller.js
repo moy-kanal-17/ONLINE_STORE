@@ -27,8 +27,8 @@ let AuthController = class AuthController {
     async register(createUserDto, role, res) {
         if (role != "customer" &&
             role !== "seller" &&
-            role !== "admin" &&
-            role !== "creator") {
+            role !== "creator" &&
+            role !== "admin") {
             throw new common_1.BadRequestException("Ro'yxatdan o'tish uchun yaroqsiz rol ko'rsatildi");
         }
         const registrationResult = await this.authService.register(createUserDto, role);
@@ -52,6 +52,10 @@ let AuthController = class AuthController {
                 error: err.message || "Loginda xatolik",
             };
         }
+    }
+    logOut(id, role, res) {
+        console.log("Logging out user with ID:", id, "and role:", role);
+        return this.authService.signout(id, role, res);
     }
     getRegistriPage() {
         return {
@@ -103,6 +107,16 @@ __decorate([
     __metadata("design:paramtypes", [login_auth_dto_1.LoginDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)("logout/:id"),
+    (0, common_1.UseGuards)(auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Body)("role")),
+    __param(2, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logOut", null);
 __decorate([
     (0, common_1.Get)("registri"),
     (0, common_1.Render)("registri"),

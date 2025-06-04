@@ -18,6 +18,7 @@ const customer_service_1 = require("./customer.service");
 const create_customer_dto_1 = require("./dto/create-customer.dto");
 const update_customer_dto_1 = require("./dto/update-customer.dto");
 const admin_guard_1 = require("../common/guards/admin.guard");
+const throttler_1 = require("@nestjs/throttler");
 let CustomerController = class CustomerController {
     customerService;
     constructor(customerService) {
@@ -64,7 +65,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CustomerController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.UseGuards)(admin_guard_1.AdminhGuard),
+    (0, common_1.UseGuards)(admin_guard_1.AdminhGuard, throttler_1.ThrottlerGuard),
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),

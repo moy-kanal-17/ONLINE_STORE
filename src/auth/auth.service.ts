@@ -31,15 +31,61 @@ import { Admin } from 'src/admin/model/admin.model';
 
       @InjectModel(Admin)
       private readonly adminModel: typeof Admin,
-      
+
       private readonly jwtService: JwtService,
       private readonly mailService: MailService
     ) {}
 
+    async signout(
+      userId: string,
+      role: "customer" | "seller" | "admin" | "creator",
+      res: Response
+    ) {
+      let user: Customer | Seller | Admin | null = null;
+
+      console.log("user ID:", userId, "user Role:", role, "👨‍💻");
+
+      if (role === "customer") {
+        user = await this.CustomerModel.findByPk(userId);
+      } else if (role === "seller") {
+        user = await this.sellerModel.findByPk(userId);
+      } else if (role === "admin") {
+        user = await this.adminModel.findByPk(userId);
+      } else if (role === "creator") {
+        user = await this.adminModel.findOne({
+          where: { id: userId, iscreator: true },
+        });
+      }
+
+      if (!user) {
+        console.log(user, "👨‍💻");
+
+        throw new NotFoundException("Foydalanuvchi topilmadi");
+      }
+
+      if (role === "admin" || role === "creator") {
+        // await this.adminModel.update({ hashed_token: null });
+      }
+
+      res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+      res.clearCookie("refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+
+      // Возвращаем ответ
+      res.json({ message: "Tizimdan muvaffaqiyatli chiqildi" });
+    }
+
     async register(
       createUserDto: CreateUserDto,
-      role: "customer" | "seller" | "admin"| "creator"
-    ){
+      role: "customer" | "seller" | "creator" | "admin"
+    ) {
       const { email, password, ...rest } = createUserDto as any;
 
       let existingUser: Customer | Seller | Admin | null = null;
@@ -69,7 +115,9 @@ import { Admin } from 'src/admin/model/admin.model';
           );
         }
       } else if (role === "creator") {
-        existingUser = await this.adminModel.findOne({ where: { email:email,iscreator:true } });
+        existingUser = await this.adminModel.findOne({
+          where: { email: email, iscreator: true },
+        });
         if (existingUser) {
           console.log(existingUser);
           throw new BadRequestException(
@@ -120,11 +168,9 @@ import { Admin } from 'src/admin/model/admin.model';
       if (!newUser.email) {
         console.log(newUser);
 
-
         console.error(
           "Xato: Yaratilgan user obyekti yoki uning emaili mavjud emas!"
         );
-
       }
 
       console.log(newUser.email);
@@ -141,7 +187,7 @@ import { Admin } from 'src/admin/model/admin.model';
       // return res.json({
       //   message: `Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi. ${role} hisobingizni faollashtirish uchun emailingizni tekshiring.`,
       // });
-      return true
+      return true;
     }
 
     async login(loginDto: LoginDto, res: Response) {
@@ -150,13 +196,15 @@ import { Admin } from 'src/admin/model/admin.model';
       let user: Customer | Seller | Admin | null = null;
 
       if (role === "customer") {
-        user = await this.CustomerModel.findOne({ where: { email:email } });
+        user = await this.CustomerModel.findOne({ where: { email: email } });
       } else if (role === "seller") {
         user = await this.sellerModel.findOne({ where: { email } });
       } else if (role === "admin") {
         user = await this.adminModel.findOne({ where: { email } });
       } else if (role === "creator") {
-        user = await this.adminModel.findOne({ where: { email:email ,iscreator:true } });
+        user = await this.adminModel.findOne({
+          where: { email: email, iscreator: true },
+        });
       } else {
         console.log(user);
 
@@ -169,7 +217,7 @@ import { Admin } from 'src/admin/model/admin.model';
         throw new UnauthorizedException("Email yoki parol noto'g'r👨‍💻i");
       }
 
-      if (role !== "admin" && user.is_active=== false) {
+      if (role !== "admin" && user.is_active === false) {
         const activationToken = randomUUID();
         await (user as any).update({ active_link: activationToken });
         await this.mailService.sendActivationLink({
@@ -226,7 +274,7 @@ import { Admin } from 'src/admin/model/admin.model';
       //     (user as any).first_name ||
       //     (user as any).shop_name ||
       //     "foydalanuvchi",
-      // }); 
+      // });
 
       return res.redirect("/foods/main");
       // return res.json({ access_token, user: { id: user.id, email: user.email, role } });

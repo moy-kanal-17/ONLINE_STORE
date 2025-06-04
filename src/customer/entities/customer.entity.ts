@@ -7,6 +7,8 @@ import {  Table,
   AutoIncrement,
   Default,
   AllowNull,
+  Unique,
+  
 } from "sequelize-typescript";
 import { Buy } from "../../buy/entities/buy.entity";
 import { CustomerLike } from "../../customer-likes/entities/customer-like.entity";
@@ -40,9 +42,11 @@ export class Customer extends Model<Customer> {
   })
   declare phone_number?: string;
 
+  @Unique(true)
   @Column({
     type: DataType.STRING,
     allowNull: false,
+   
   })
   declare email: string;
 
@@ -64,7 +68,7 @@ export class Customer extends Model<Customer> {
   })
   declare birthday?: Date;
 
-  @Default(true)
+  @Default(false)
   @Column(DataType.BOOLEAN)
   declare is_active: boolean;
 

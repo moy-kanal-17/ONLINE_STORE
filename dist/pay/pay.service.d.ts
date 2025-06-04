@@ -9,7 +9,7 @@ export declare class PayService {
     private readonly buyModel;
     private readonly productModel;
     constructor(payModel: typeof Pay, buyModel: BuyService, productModel: FoodService);
-    create(createPayDto: CreatePayDto, res: Response, req: Request): Promise<void>;
+    create(createPayDto: CreatePayDto, res: Response, req: Request): Promise<Response<any, Record<string, any>>>;
     findAll(): Promise<Pay[]>;
     findOne(id: number): Promise<Pay | null>;
     update(id: number, updatePayDto: UpdatePayDto): Promise<Pay | null>;

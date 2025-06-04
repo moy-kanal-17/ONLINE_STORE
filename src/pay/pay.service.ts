@@ -1,5 +1,4 @@
-import { InjectModel } from "@nestjs/sequelize";import { Pay } from "./entities/pay.entity";import { CreatePayDto } from "./dto/create-pay.dto";import { UpdatePayDto } from "./dto/update-pay.dto";import { Injectable, Req, Res } from "@nestjs/common";import { Buy } from "src/buy/entities/buy.entity";import { BuyService } from "src/buy/buy.service";import { randomUUID } from "crypto";import { Request, Response } from "express";import * as jwt from "jsonwebtoken"; import { FoodService } from "src/Product/food.service";import { Customer } from "src/customer/entities/customer.entity";
-import { Product } from "src/Product/entities/food.entity";
+import { InjectModel } from "@nestjs/sequelize";import { Pay } from "./entities/pay.entity";import { CreatePayDto } from "./dto/create-pay.dto";import { UpdatePayDto } from "./dto/update-pay.dto";import { Injectable, Req, Res } from "@nestjs/common";import { Buy } from "src/buy/entities/buy.entity";import { BuyService } from "src/buy/buy.service";import { randomUUID } from "crypto";import { Request, Response } from "express";import * as jwt from "jsonwebtoken"; import { FoodService } from "src/Product/food.service";import { Customer } from "src/customer/entities/customer.entity";import { Product } from "src/Product/entities/food.entity";
 @Injectable()export class PayService {  constructor(
     @InjectModel(Pay)
     private payModel: typeof Pay,
@@ -12,6 +11,12 @@ import { Product } from "src/Product/entities/food.entity";
     const productId = createPayDto.product_id;
 
     const product = await this.productModel.findone(productId);
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    console.log("Product found:", product.id);
+    
 
     const productPrice = product!.price;
 
@@ -35,6 +40,8 @@ import { Product } from "src/Product/entities/food.entity";
     console.log("Customer token from cookie:", accessToken);
 
     if (!accessToken) {
+      console.log("Access token not found in cookie😎");
+      
       throw new Error("Access token not found in cookie");
     }
 
@@ -49,7 +56,7 @@ import { Product } from "src/Product/entities/food.entity";
 
 
 
-      const product = await this.productModel.findone(productId);
+ 
 
       const productPrice = product?.price;
 
@@ -61,10 +68,19 @@ import { Product } from "src/Product/entities/food.entity";
       };
 
       const buy = await this.buyModel.create(buyData);
-
       if (!buy) {
         throw new Error("Buy not created");
       }
+      console.log("Buy created successfully:", buy.id);
+      return res.status(201).json({
+        message: "Payment created successfully",
+        pay: pay,
+        buy: buy,
+      });
+
+      // return buy  || null;  
+        
+
     } catch (error) {
       console.error("Tokenni dekodlashda xatolik:", error);
       throw new Error("Tokenni dekodlashda xatolik");

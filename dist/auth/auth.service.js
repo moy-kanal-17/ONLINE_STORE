@@ -35,6 +35,41 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
         this.mailService = mailService;
     }
+    async signout(userId, role, res) {
+        let user = null;
+        console.log("user ID:", userId, "user Role:", role, "👨‍💻");
+        if (role === "customer") {
+            user = await this.CustomerModel.findByPk(userId);
+        }
+        else if (role === "seller") {
+            user = await this.sellerModel.findByPk(userId);
+        }
+        else if (role === "admin") {
+            user = await this.adminModel.findByPk(userId);
+        }
+        else if (role === "creator") {
+            user = await this.adminModel.findOne({
+                where: { id: userId, iscreator: true },
+            });
+        }
+        if (!user) {
+            console.log(user, "👨‍💻");
+            throw new common_1.NotFoundException("Foydalanuvchi topilmadi");
+        }
+        if (role === "admin" || role === "creator") {
+        }
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        res.clearCookie("refresh_token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        res.json({ message: "Tizimdan muvaffaqiyatli chiqildi" });
+    }
     async register(createUserDto, role) {
         const { email, password, ...rest } = createUserDto;
         let existingUser = null;
@@ -60,7 +95,9 @@ let AuthService = class AuthService {
             }
         }
         else if (role === "creator") {
-            existingUser = await this.adminModel.findOne({ where: { email: email, iscreator: true } });
+            existingUser = await this.adminModel.findOne({
+                where: { email: email, iscreator: true },
+            });
             if (existingUser) {
                 console.log(existingUser);
                 throw new common_1.BadRequestException(`Ushbu email (${email}) admin uchun band`);
@@ -133,7 +170,9 @@ let AuthService = class AuthService {
             user = await this.adminModel.findOne({ where: { email } });
         }
         else if (role === "creator") {
-            user = await this.adminModel.findOne({ where: { email: email, iscreator: true } });
+            user = await this.adminModel.findOne({
+                where: { email: email, iscreator: true },
+            });
         }
         else {
             console.log(user);

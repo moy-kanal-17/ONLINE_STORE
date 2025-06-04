@@ -32,8 +32,8 @@ import { ThrottlerModule } from "@nestjs/throttler";
 
     ThrottlerModule.forRoot([
       {
-        ttl: 60000, // 60 soniya = 60 * 1000 = 60000 milisaniya
-        limit: 4, // Har bir foydalanuvchi uchun 10 ta so‘rov ruxsat
+        ttl: 60000, 
+        limit: 4, 
       },
     ]),
     

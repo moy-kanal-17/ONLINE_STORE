@@ -46,6 +46,7 @@ __decorate([
     __metadata("design:type", String)
 ], Customer.prototype, "phone_number", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Unique)(true),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING,
         allowNull: false,
@@ -74,7 +75,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Customer.prototype, "birthday", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Default)(true),
+    (0, sequelize_typescript_1.Default)(false),
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.BOOLEAN),
     __metadata("design:type", Boolean)
 ], Customer.prototype, "is_active", void 0);

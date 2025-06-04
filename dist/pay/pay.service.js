@@ -35,6 +35,10 @@ let PayService = class PayService {
         createPayDto.terminal = (0, crypto_1.randomUUID)();
         const productId = createPayDto.product_id;
         const product = await this.productModel.findone(productId);
+        if (!product) {
+            throw new Error("Product not found");
+        }
+        console.log("Product found:", product.id);
         const productPrice = product.price;
         if (!productPrice) {
             throw new Error("Product ID is required in CreatePayDto");
@@ -50,6 +54,7 @@ let PayService = class PayService {
         const accessToken = req.cookies["access_token"];
         console.log("Customer token from cookie:", accessToken);
         if (!accessToken) {
+            console.log("Access token not found in cookie😎");
             throw new Error("Access token not found in cookie");
         }
         try {
@@ -59,7 +64,6 @@ let PayService = class PayService {
             if (!customerId) {
                 throw new Error("Customer ID not found in token");
             }
-            const product = await this.productModel.findone(productId);
             const productPrice = product?.price;
             const buyData = {
                 customer_id: customerId,
@@ -71,6 +75,12 @@ let PayService = class PayService {
             if (!buy) {
                 throw new Error("Buy not created");
             }
+            console.log("Buy created successfully:", buy.id);
+            return res.status(201).json({
+                message: "Payment created successfully",
+                pay: pay,
+                buy: buy,
+            });
         }
         catch (error) {
             console.error("Tokenni dekodlashda xatolik:", error);

@@ -30,7 +30,7 @@ let AdminhGuard = class AdminhGuard {
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_ACCESS_SECRET || "super-secret",
             });
-            request.user = payload;
+            request["user"] = payload;
             if (payload.role !== "admin" && payload.role !== "creator") {
                 console.log(`User is not an admin👎${payload.role}`);
                 response.redirect("/auth/login");

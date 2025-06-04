@@ -1,5 +1,4 @@
-import {  Controller,  Get,  Post,  Body,
-  Patch,
+import {  Controller,  Get,  Post,  Body,  Patch,
   Param,
   Delete,
   UseGuards,
@@ -10,6 +9,7 @@ import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { UpdateCustomerDto } from "./dto/update-customer.dto";
 import { Response } from "express";
 import { AdminhGuard } from "src/common/guards/admin.guard";
+import { ThrottlerGuard } from "@nestjs/throttler";
 
 @Controller("customers")
 export class CustomerController {
@@ -33,7 +33,7 @@ export class CustomerController {
     return this.customerService.findOne(+id);
   }
 
-  @UseGuards(AdminhGuard)
+  @UseGuards(AdminhGuard, ThrottlerGuard)
   @Patch(":id")
   update(
     @Param("id") id: string,

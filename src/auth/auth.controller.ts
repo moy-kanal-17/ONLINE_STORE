@@ -12,15 +12,15 @@ import {
   BadRequestException,
   Render,
   UseGuards,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-users.dto';
-import { LoginDto } from './dto/login-auth.dto';
-import { Request, Response } from 'express';
-import { TokenFreshnessGuard } from 'src/common/guards/TokenFresher.guard';
-import { JwtAuthGuard } from 'src/common/guards/auth.guard';
-import { ActiveUserGuard } from 'src/common/guards/ActiveUser.guard';
-import { ThrottlerGuard } from '@nestjs/throttler';
+} from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { CreateUserDto } from "./dto/create-users.dto";
+import { LoginDto } from "./dto/login-auth.dto";
+import { Request, Response } from "express";
+import { TokenFreshnessGuard } from "src/common/guards/TokenFresher.guard";
+import { JwtAuthGuard } from "src/common/guards/auth.guard";
+import { ActiveUserGuard } from "src/common/guards/ActiveUser.guard";
+import { ThrottlerGuard } from "@nestjs/throttler";
 
 @Controller("auth")
 export class AuthController {
@@ -31,14 +31,14 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() createUserDto: CreateUserDto,
-    @Param("role") role: "customer" | "seller" | "admin" | "creator",
+    @Param("role") role: "customer" | "seller" | "creator" | "admin",
     @Res() res: Response
   ) {
     if (
       role != "customer" &&
       role !== "seller" &&
-      role !== "admin" &&
-      role !== "creator"
+      role !== "creator" &&
+      role !== "admin"
     ) {
       throw new BadRequestException(
         "Ro'yxatdan o'tish uchun yaroqsiz rol ko'rsatildi"
@@ -75,6 +75,19 @@ export class AuthController {
         error: err.message || "Loginda xatolik",
       };
     }
+  }
+
+  @Post("logout/:id")
+  // @UseGuards(TokenFreshnessGuard)
+  @UseGuards(JwtAuthGuard)
+  logOut(
+    @Param("id") id,
+    @Body("role") role: "customer" | "seller" | "admin" | "creator",
+    @Res() res: Response
+  ) {
+    console.log("Logging out user with ID:", id, "and role:", role);
+
+    return this.authService.signout(id, role, res);
   }
 
   @Get("registri")

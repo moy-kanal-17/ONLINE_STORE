@@ -30,7 +30,7 @@ let CreatorhGuard = class CreatorhGuard {
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_ACCESS_SECRET || "super-secret",
             });
-            request.user = payload;
+            request["user"] = payload;
             if (payload.role !== 'creator') {
                 console.log(`User is not an admin:👎${payload.role}`);
                 response.json({ message: `Access Denied: Invalid token your role:${payload.role}` });

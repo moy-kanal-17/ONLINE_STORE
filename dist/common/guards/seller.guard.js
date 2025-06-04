@@ -31,8 +31,7 @@ let SellerhGuard = class SellerhGuard {
                 secret: process.env.JWT_ACCESS_SECRET || 'access-secret-replace-me',
             });
             request['user'] = payload;
-            request.user = payload;
-            if (payload.role !== 'seller') {
+            if (payload.role !== 'seller' && payload.role !== 'admin' && payload.role !== 'creator') {
                 console.log('User is not an seller');
                 response.redirect('/auth/login');
                 return false;

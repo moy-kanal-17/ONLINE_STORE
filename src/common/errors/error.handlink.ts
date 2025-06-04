@@ -132,10 +132,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
         }
       );
 
-      logger.info("Telegram xabari muvaffaqiyatli yuborildi:", {
-        chat_id: this.telegramAdminId,
-        telegramResponse: response.data,
-      });
+      // logger.info("Telegram xabari muvaffaqiyatli yuborildi:", {
+      //   chat_id: this.telegramAdminId,
+      //   telegramResponse: response.data,
+      // });
     } catch (error) {
       throw new Error(
         `Telegram xabarni yuborishda xatolik: ${error.message}, Telegram: ${JSON.stringify(
