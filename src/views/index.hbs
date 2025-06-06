@@ -307,7 +307,7 @@
             font-weight: bold;
         }
 
-        /* Footer */
+
         footer {
             background: var(--dark);
             color: var(--light);
@@ -446,7 +446,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+
     <header>
         <div class="logo"><a href="/foods/main">MYShop</a></div>
         <div class="search-bar">
@@ -459,13 +459,13 @@
         </div>
     </header>
 
-    <!-- Hero Banner -->
+
     <div class="hero-banner">
         <h1>Zamonaviy MY17Shop - Sizning onlayn do'koningiz!</h1>
         <p>Eng sifatli mahsulotlar va tez yetkazib berish!</p>
     </div>
 
-    <!-- Pop-up Banners -->
+
     <div class="popup-banner" id="popup1">
         <span class="popup-close" onclick="closePopup('popup1')">×</span>
         <h3>Vam interesen @MOY17Bot??</h3>
@@ -485,22 +485,23 @@
         <a href="https://t.me/uzgame_pc">Obuna bo'lish!</a>
     </div>
 
-    <!-- Categories -->
+
     <div class="categories">
         <div class="category-item" data-category="all">Hammasi</div>
         <div class="category-item" data-category="electronics">Elektronika</div>
         <div class="category-item" data-category="fashion">Moda</div>
         <div class="category-item" data-category="home">Uy-ro'zg'or</div>
-        <div class="category-item" data-category="food">Taomlar</div>
+        <div class="category-item" data-category="foods">Taomlar</div>
     </div>
 
-    <!-- Food Grid -->
+
     <div id="foodGrid" class="food-grid">
         {{#each foods}}
         <a href="/foods/product/{{this.id}}" class="food-card-link">
             <div class="food-card" data-name="{{this.name}}" data-author="{{this.author}}" data-price="{{this.price}}" data-rating="{{this.rating}}" data-time="{{this.id}}" data-skids="{{this.skids}}" data-category="{{this.category}}">
                 <img src="/images/{{this.image}}" alt="{{this.name}}" class="food-image">
                 <div class="card-body">
+                    {{!-- <div><h1>data-category</h1></div> --}}
                     <div class="food-name">{{this.name}}</div>
                     <div class="details">
                         <div><i class="fas fa-star"></i> {{this.rating}}</div>
@@ -516,10 +517,10 @@
         {{/each}}
     </div>
 
-    <!-- Loader -->
+
     <div class="loader" id="loader"></div>
 
-    <!-- Footer -->
+
     <footer>
         <div class="footer-links">
             <a href="/about">Biz haqimizda</a>
@@ -535,7 +536,7 @@
         <p>© 2025 MY17Shop. Barcha huquqlar himoyalangan.</p>
     </footer>
 
-    <!-- Modal -->
+
     <div id="modal" class="modal">
         <div class="modal-content">
             <span id="modalClose" class="modal-close">×</span>
@@ -558,7 +559,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script>
-        // Pop-up Banner Logic
+
         const popups = [
             { id: 'popup1', delay: 5000 },
             { id: 'popup2', delay: 20000 },
@@ -570,7 +571,7 @@
             popup.classList.add('active');
             setTimeout(() => {
                 popup.classList.remove('active');
-            }, 10000); // Hide after 10 seconds
+            }, 10000); 
         }
 
         function closePopup(id) {
@@ -580,11 +581,11 @@
         popups.forEach(popup => {
             setTimeout(() => {
                 showPopup(popup.id);
-                setInterval(() => showPopup(popup.id), 60000); // Repeat every 60 seconds
+                setInterval(() => showPopup(popup.id), 120000); 
             }, popup.delay);
         });
 
-        // Search
+
         const searchInput = document.getElementById('searchInput');
         const foodGrid = document.getElementById('foodGrid');
         const modal = document.getElementById('modal');
@@ -606,7 +607,7 @@
             });
         });
 
-        // Category Filter
+
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', () => {
                 const category = item.getAttribute('data-category');
@@ -621,7 +622,7 @@
             });
         });
 
-        // Food Card Click
+
         foodGrid.addEventListener('click', (e) => {
             const cardLink = e.target.closest('.food-card-link');
             if (cardLink) return;
@@ -651,7 +652,7 @@
             modal.style.display = 'flex';
         });
 
-        // Get Cookie
+
         function getCookie(name) {
             const cookies = document.cookie.split('; ');
             for (let cookie of cookies) {
@@ -661,7 +662,7 @@
             return null;
         }
 
-        // Account Button
+
         accountBtn.addEventListener('click', () => {
             const accessToken = getCookie('access_token');
             if (accessToken) {
@@ -685,7 +686,7 @@
             }
         });
 
-        // Modal Close
+
         modalClose.addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -694,7 +695,7 @@
             if (e.target === modal) modal.style.display = 'none';
         });
 
-        // Simulate Loading
+
         window.addEventListener('load', () => {
             loader.style.display = 'block';
             setTimeout(() => {

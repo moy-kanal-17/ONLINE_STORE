@@ -13,7 +13,7 @@ export declare class AuthService {
     private readonly jwtService;
     private readonly mailService;
     constructor(CustomerModel: typeof Customer, sellerModel: typeof Seller, adminModel: typeof Admin, jwtService: JwtService, mailService: MailService);
-    signout(userId: string, role: "customer" | "seller" | "admin" | "creator", res: Response): Promise<void>;
+    signout(userId: number, role: "customer" | "seller" | "admin" | "creator", res: Response): Promise<void>;
     register(createUserDto: CreateUserDto, role: "customer" | "seller" | "creator" | "admin"): Promise<boolean>;
     login(loginDto: LoginDto, res: Response): Promise<void>;
     activateUser(token: string): Promise<{

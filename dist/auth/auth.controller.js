@@ -55,7 +55,8 @@ let AuthController = class AuthController {
     }
     logOut(id, role, res) {
         console.log("Logging out user with ID:", id, "and role:", role);
-        return this.authService.signout(id, role, res);
+        const userId = id;
+        return this.authService.signout(userId, role, res);
     }
     getRegistriPage() {
         return {
@@ -114,7 +115,7 @@ __decorate([
     __param(1, (0, common_1.Body)("role")),
     __param(2, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Number, String, Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "logOut", null);
 __decorate([

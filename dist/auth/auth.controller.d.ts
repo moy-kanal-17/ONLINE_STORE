@@ -10,7 +10,7 @@ export declare class AuthController {
         data: LoginDto;
         error: any;
     } | undefined>;
-    logOut(id: any, role: "customer" | "seller" | "admin" | "creator", res: Response): Promise<void>;
+    logOut(id: number, role: "customer" | "seller" | "admin" | "creator", res: Response): Promise<void>;
     getRegistriPage(): {
         data: {
             email: string;

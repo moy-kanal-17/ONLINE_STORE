@@ -37,7 +37,7 @@ import { Admin } from 'src/admin/model/admin.model';
     ) {}
 
     async signout(
-      userId: string,
+      userId:number,
       role: "customer" | "seller" | "admin" | "creator",
       res: Response
     ) {
